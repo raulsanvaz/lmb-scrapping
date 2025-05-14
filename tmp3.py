@@ -1,5 +1,4 @@
 import re
-import os
 import time
 from playwright.sync_api import Playwright, sync_playwright, expect
 
@@ -14,16 +13,14 @@ def getPlayers(playwright: Playwright) -> None:
     page.get_by_text("Jugadores", exact=True).nth(3).click()
     page.get_by_text("Bateo").nth(2).click()
     for year in years:
-        print(f'Scrappeando {year}...')
-        os.makedirs(os.path.join(os.getcwd(), 'downloads', 'images', year), exist_ok=True)
         page.locator(".CustomSelect_customSelect__7RjU5").first.select_option(year)
         flag = True
         pageCount = 0
         while flag:
             try:
-                time.sleep(5)
-                page.screenshot(path=os.path.join(os.getcwd(), 'downloads', 'images', year, f'year-{pageCount}.png'), full_page=True)
                 page.get_by_text("Próx").nth(2).click()
+                time.sleep(5)
+                page.screenshot(path=f"year-{pageCount}.png", full_page=True)
                 count += 1
             except:
                 flag = False
